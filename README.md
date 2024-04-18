@@ -2,7 +2,7 @@
 # OAuth 1.0A from-Scratch
 
 ## OAuth 1.0A Flow Diagram
-<img width="1387" alt="oauth_one_flow" src="https://github.com/bkieselEducational/OAuth-1.0a-from-Scratch/assets/131717897/23e84a3e-b1a9-4050-aa6e-bf31abdf3943">
+<img width="1399" alt="oauth_one_flow_2" src="https://github.com/bkieselEducational/OAuth-1.0a-from-Scratch/assets/131717897/e90a6e56-edcc-4b51-be7c-7895eb4c065a">
 
 
 ## OAuth 1.0a Flow Walkthrough
@@ -26,7 +26,10 @@ The request will be constructed as shown below. Note the use of the Authorizatio
 Here we redirect the client's browser to the login page for the vendor in question. Upon successful login, the vendor will send a GET request to our callback endpoint, which unlike in OAuth 2.0 we did not have to register with the provider of the OAuth API.
 
 ### Step 5:
-Having received our OAuth Token and now the oauth_verifier as a result of the successful login, we can now send another request to the OAuth API to request an Access Token by sending the oauth_verifier in that request.
+Having received our OAuth Token and now the oauth_verifier as a result of the successful login, we can now send another request to the OAuth API to request an Access Token by sending the oauth_verifier in that request.<br>
+
+<img width="1257" alt="oauth_one_access" src="https://github.com/bkieselEducational/OAuth-1.0a-from-Scratch/assets/131717897/7342e70a-0e61-4ca7-a1aa-8cfde1acfa90"><br>
+
 
 ### Step 6:
 
