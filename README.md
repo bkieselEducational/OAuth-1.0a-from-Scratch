@@ -41,7 +41,7 @@ The request will be constructed as shown below. Note the use of the Authorizatio
 
 ## The Cryptography of OAuth 1.0a
 
-Interestingly, OAuth 1.0a is actually considered to be more cryptographically involved than OAuth 2.0. It was actually an important design decision of the OAuth 2.0 authors to make this simpler for developers. The OAuth 1.0a Signing Algorithm, similar to the AWS Signature v4 algorithm (Canonical Request), requires the construction of a "Base String". The Base String is essentially a URL encoded version of what will be included in the Authorization Header of the request with a couple of additions. It is this Base String which is then hashed using a SHA1-HMAC algorithm. It is this hash that is used as the Signature for the request. On the server side, the Base String will be constructed again and the generated hash will be compared to what we sent as the signature.
+**Interestingly, OAuth 1.0a is actually considered to be more cryptographically involved than OAuth 2.0. It was actually an important design decision of the OAuth 2.0 authors to make this simpler for developers. The OAuth 1.0a Signing Algorithm, similar to the AWS Signature v4 algorithm (Canonical Request), requires the construction of a "Base String". The Base String is essentially a URL encoded version of what will be included in the Authorization Header of the request with a couple of additions. It is this Base String which is then hashed using a SHA1-HMAC algorithm. It is this hash that is used as the Signature for the request. On the server side, the Base String will be constructed again and the generated hash will be compared to what we sent as the signature.**
 
 ```python
 # Looking at the file authlib/oauth1/rfc5849/signature.py from the authlib library we can see how the base string is being constructed
@@ -149,4 +149,4 @@ def hmac_sha1_signature(base_string, client_secret, token_secret):
     return to_unicode(sig)
 ```
 
-Ultimately, the signature will be included with the request by being included in the Authorization Header which is defined as being of type 'OAuth'
+**Ultimately, the signature will be included with the request by being included in the Authorization Header which is defined as being of type 'OAuth'.**
