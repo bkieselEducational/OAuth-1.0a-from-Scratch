@@ -1,5 +1,5 @@
 [<-- BACK](https://github.com/bkieselEducational/OAuth-Concepts-and-Implementation)
-# OAuth 1.0A from-Scratch
+# OAuth 1.0A from Scratch
 
 ## OAuth 1.0A Flow Diagram
 <img width="1399" alt="oauth_one_flow_2" src="https://github.com/bkieselEducational/OAuth-1.0a-from-Scratch/assets/131717897/e90a6e56-edcc-4b51-be7c-7895eb4c065a">
