@@ -19,7 +19,8 @@ Inside of our endpoint, we call the method fetch_request_token() which will gene
 
 The request will be constructed as shown below. Note the use of the Authorization Header and that the values assigned to the keys must be quoted.<br>
 
-<img width="674" alt="oauth_one_1" src="https://github.com/bkieselEducational/OAuth-1.0a-from-Scratch/assets/131717897/ed89591e-135e-4c19-a984-7da62e25d5d4"><br>
+<img width="795" alt="oauth_one_temp_2" src="https://github.com/bkieselEducational/OAuth-1.0a-from-Scratch/assets/131717897/857c38e7-f1a6-4b18-af36-f7721d1810e5">
+
 
 
 ### Step 4:
