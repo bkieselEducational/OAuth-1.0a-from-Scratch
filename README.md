@@ -33,7 +33,10 @@ Having received our OAuth Token and now the oauth_verifier as a result of the su
 
 
 ### Step 6:
+Assuming we have recieved a successful response from the vendor, we should now have an Access Token for our user. We can now finish the process of logging the user into our application.
 
+### Step 7:
+Finally we redirect the user back to our app, having logged them in.
 
 
 ## The Cryptography of OAuth 1.0a
