@@ -42,3 +42,111 @@ The request will be constructed as shown below. Note the use of the Authorizatio
 ## The Cryptography of OAuth 1.0a
 
 Interestingly, OAuth 1.0a is actually considered to be more cryptographically involved than OAuth 2.0. It was actually an important design decision of the OAuth 2.0 authors to make this simpler for developers. The OAuth 1.0a Signing Algorithm, similar to the AWS Signature v4 algorithm (Canonical Request), requires the construction of a "Base String". The Base String is essentially a URL encoded version of what will be included in the Authorization Header of the request with a couple of additions. It is this Base String which is then hashed using a SHA1-HMAC algorithm. It is this hash that is used as the Signature for the request. On the server side, the Base String will be constructed again and the generated hash will be compared to what we sent as the signature.
+
+```python
+# Looking at the file authlib/oauth1/rfc5849/signature.py from the authlib library we can see how the base string is being constructed
+
+def construct_base_string(method, uri, params, host=None):
+    """Generate signature base string from request, per `Section 3.4.1`_.
+
+    For example, the HTTP request::
+
+        POST /request?b5=%3D%253D&a3=a&c%40=&a2=r%20b HTTP/1.1
+        Host: example.com
+        Content-Type: application/x-www-form-urlencoded
+        Authorization: OAuth realm="Example",
+            oauth_consumer_key="9djdj82h48djs9d2",
+            oauth_token="kkk9d7dh3k39sjv7",
+            oauth_signature_method="HMAC-SHA1",
+            oauth_timestamp="137131201",
+            oauth_nonce="7d8f3e4a",
+            oauth_signature="bYT5CMsGcbgUdFHObYMEfcx6bsw%3D"
+
+        c2&a3=2+q
+
+    is represented by the following signature base string (line breaks
+    are for display purposes only)::
+
+        POST&http%3A%2F%2Fexample.com%2Frequest&a2%3Dr%2520b%26a3%3D2%2520q
+        %26a3%3Da%26b5%3D%253D%25253D%26c%2540%3D%26c2%3D%26oauth_consumer_
+        key%3D9djdj82h48djs9d2%26oauth_nonce%3D7d8f3e4a%26oauth_signature_m
+        ethod%3DHMAC-SHA1%26oauth_timestamp%3D137131201%26oauth_token%3Dkkk
+        9d7dh3k39sjv7
+
+    .. _`Section 3.4.1`: https://tools.ietf.org/html/rfc5849#section-3.4.1
+    """
+
+    # Create base string URI per Section 3.4.1.2
+    base_string_uri = normalize_base_string_uri(uri, host)
+
+    # Cleanup parameter sources per Section 3.4.1.3.1
+    unescaped_params = []
+    for k, v in params:
+        # The "oauth_signature" parameter MUST be excluded from the signature
+        if k in ('oauth_signature', 'realm'):
+            continue
+
+        # ensure oauth params are unescaped
+        if k.startswith('oauth_'):
+            v = unescape(v)
+        unescaped_params.append((k, v))
+
+    # Normalize parameters per Section 3.4.1.3.2
+    normalized_params = normalize_parameters(unescaped_params)
+
+    # construct base string
+    return '&'.join([
+        escape(method.upper()),
+        escape(base_string_uri),
+        escape(normalized_params),
+    ])
+
+# The Base String is returned and ultimately hashed to generate the signature using another of the class methods hmac_sha1_signature()
+
+def hmac_sha1_signature(base_string, client_secret, token_secret):
+    """Generate signature via HMAC-SHA1 method, per `Section 3.4.2`_.
+
+    The "HMAC-SHA1" signature method uses the HMAC-SHA1 signature
+    algorithm as defined in `RFC2104`_::
+
+        digest = HMAC-SHA1 (key, text)
+
+    .. _`RFC2104`: https://tools.ietf.org/html/rfc2104
+    .. _`Section 3.4.2`: https://tools.ietf.org/html/rfc5849#section-3.4.2
+    """
+
+    # The HMAC-SHA1 function variables are used in following way:
+
+    # text is set to the value of the signature base string from
+    # `Section 3.4.1.1`_.
+    #
+    # .. _`Section 3.4.1.1`: https://tools.ietf.org/html/rfc5849#section-3.4.1.1
+    text = base_string
+
+    # key is set to the concatenated values of:
+    # 1.  The client shared-secret, after being encoded (`Section 3.6`_).
+    #
+    # .. _`Section 3.6`: https://tools.ietf.org/html/rfc5849#section-3.6
+    key = escape(client_secret or '')
+
+    # 2.  An "&" character (ASCII code 38), which MUST be included
+    #     even when either secret is empty.
+    key += '&'
+
+    # 3.  The token shared-secret, after being encoded (`Section 3.6`_).
+    #
+    # .. _`Section 3.6`: https://tools.ietf.org/html/rfc5849#section-3.6
+    key += escape(token_secret or '')
+
+    signature = hmac.new(to_bytes(key), to_bytes(text), hashlib.sha1)
+
+    # digest  is used to set the value of the "oauth_signature" protocol
+    #         parameter, after the result octet string is base64-encoded
+    #         per `RFC2045, Section 6.8`.
+    #
+    # .. _`RFC2045, Section 6.8`: https://tools.ietf.org/html/rfc2045#section-6.8
+    sig = binascii.b2a_base64(signature.digest())[:-1]
+    return to_unicode(sig)
+```
+
+Ultimately, the signature will be included with the request by being included in the Authorization Header which is defined as being of type 'OAuth'
