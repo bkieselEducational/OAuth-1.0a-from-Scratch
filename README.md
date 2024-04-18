@@ -150,3 +150,6 @@ def hmac_sha1_signature(base_string, client_secret, token_secret):
 ```
 
 **Ultimately, the signature will be included with the request by being included in the Authorization Header which is defined as being of type 'OAuth'.**
+
+## Additional Resources
+1. [OAuth 1.0a Official](https://oauth.net/core/1.0a/)
