@@ -15,9 +15,9 @@
 **Our backend endpoint for initializing the flow will now grab our credentials from the environment (consumer_key, consumer_secret) and instantiate an instance of the OAuth1Session class from the authlib library.**
 
 ### Step 3:
-**Inside of our endpoint, we call the method fetch_request_token() which will generate the request to be sent to the OAuth 1.0a server. The construction of this request is non-trivial and will be discussed in more detail in the section below titled "The Cryptography of OAuth 1.0a". Note that a successful response to this request will return an oauth_token that we can use to obtain an Access Token if desired / needed.
+**Inside of our endpoint, we call the method fetch_request_token() which will generate the request to be sent to the OAuth 1.0a server. The construction of this request is non-trivial and will be discussed in more detail in the section below titled "The Cryptography of OAuth 1.0a". Note that a successful response to this request will return an oauth_token that we can use to obtain an Access Token if desired / needed.**
 
-The request will be constructed as shown below. Note the use of the Authorization Header and that the values assigned to the keys must be quoted.**<br>
+**The request will be constructed as shown below. Note the use of the Authorization Header and that the values assigned to the keys must be quoted.**<br>
 
 <img width="795" alt="oauth_one_temp_2" src="https://github.com/bkieselEducational/OAuth-1.0a-from-Scratch/assets/131717897/857c38e7-f1a6-4b18-af36-f7721d1810e5">
 
